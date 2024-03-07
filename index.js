@@ -33,6 +33,8 @@ app.get("/",(req,res)=>{
 })
 
 app.get('/nostima/:tableName', (req, res) => {
+    const uid = req.body.uid;
+
     const scopedb= mysql.createConnection({
         host:"193.203.168.40",
         user:"u758955658_root",
@@ -45,7 +47,7 @@ app.get('/nostima/:tableName', (req, res) => {
 
     //const query = `SELECT * FROM ${tableName}hp ORDER BY Column_1`;
     //const query = `SELECT * FROM ${tableName}hp ORDER BY Column_1`;
-    const query = `SELECT * FROM ${tableName}`;
+    const query = `SELECT * FROM ${tableName}${uid}`;
 
   
     scopedb.query(query, (error, results, fields) => {
@@ -164,6 +166,7 @@ app.get('/nostima/:tableName', (req, res) => {
     });
   });
   app.post('/nostima/upload/template-products-table', upload.single('file'), (req, res) => {
+    const uid = req.body.uid;
 
     const scopedb = mysql.createConnection({
       host: "193.203.168.40",
@@ -177,7 +180,7 @@ app.get('/nostima/:tableName', (req, res) => {
     const excelData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
   
     // Dynamic table name based on uid
-    const tableName = `products`;
+    const tableName = `products${uid}`;
   
     // Drop the existing table if it exists
     const dropTableSQL = `
