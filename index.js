@@ -47,7 +47,7 @@ app.get('/nostima/:tableName', (req, res) => {
 
     //const query = `SELECT * FROM ${tableName}hp ORDER BY Column_1`;
     //const query = `SELECT * FROM ${tableName}hp ORDER BY Column_1`;
-    const query = `SELECT * FROM ${tableName}${uid}`;
+    const query = `SELECT * FROM ${tableName}`;
 
   
     scopedb.query(query, (error, results, fields) => {
