@@ -187,15 +187,15 @@ app.get('/nostima/:tableName', (req, res) => {
     const createTableSQL = `
       CREATE TABLE ${tableName} (
         Barcode TEXT,
-        ProductName VARCHAR(255),
-        ProductFullName VARCHAR(255),
-        Category VARCHAR(22),
-        Unit VARCHAR(22),
-        UnitPrice VARCHAR(22),
-        USt VARCHAR(22),
-        SellPrice VARCHAR(22),
-        Stock VARCHAR(22),
-        AlertStock VARCHAR(22),
+        ProductName TEXT,
+        ProductFullName TEXT,
+        Category TEXT,
+        Unit TEXT,
+        UnitPrice TEXT,
+        USt TEXT,
+        SellPrice TEXT,
+        Stock TEXT,
+        AlertStock TEXT,
         Prices TEXT
       );
     `;
@@ -238,6 +238,11 @@ app.get('/nostima/:tableName', (req, res) => {
           }
           return [...row, pricesArray[index]];
         });
+
+        const dataToInsert = dataWithPricesAndUUID.slice(1).filter(row => {
+            // Assuming ProductName is at index 1, adjust if needed
+            return row[1]; // Skip rows where ProductName is falsy (null, undefined, empty string, etc.)
+          });
   
         // Insert data into the table
         const insertDataSQL = `
@@ -245,7 +250,7 @@ app.get('/nostima/:tableName', (req, res) => {
           VALUES ?
         `;
   
-        scopedb.query(insertDataSQL, [dataWithPricesAndUUID.slice(1)], (err, insertDataResult) => {
+        scopedb.query(insertDataSQL, [dataToInsert], (err, insertDataResult) => {
           if (err) {
             console.error('Error inserting data into the table:', err);
             res.status(500).send('Internal Server Error');
